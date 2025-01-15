@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Reddit-Like Single Post</title>
+    <style>
+        /* ---------- Reset & Basic Styling ---------- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Verdana, Arial, sans-serif;
+            background-color: #dae0e6; /* Light grey typical of Reddit's background */
+        }
+
+        a {
+            text-decoration: none;
+            color: #0079d3; /* Reddit-like blue for links */
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---------- Header Bar ---------- */
+        header {
+            background-color: #ff4500; /* Reddit Orange */
+            color: #fff;
+            padding: 10px 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        /* ---------- Main Container ---------- */
+        .container {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .content {
+            width: 640px; /* Approx Reddit content width */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 4px;
+        }
+
+        /* ---------- Post Styling ---------- */
+        .post {
+            display: flex;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .post .post-votes {
+            width: 50px;
+            text-align: center;
+            background-color: #f8f9fa;
+            border-right: 1px solid #ccc;
+            padding: 10px 0;
+        }
+
+        .post-votes .upvote,
+        .post-votes .downvote {
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+            line-height: 1;
+        }
+
+        .post-votes .score {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .post .post-body-container {
+            flex-grow: 1;
+            padding: 10px;
+        }
+
+        .post-title {
+            font-size: 18px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .post-meta {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .post-thumbnail img {
+            max-height: 100px;
+            margin-bottom: 10px;
+        }
+
+        .post-image img {
+            max-width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .post-text {
+            margin-bottom: 10px;
+            white-space: pre-wrap; /* Preserve line breaks in the text body */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Reddit-Like Single Post</h1>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            <!-- Single Post -->
+            <div class="post">
+                <!-- Voting Section (Mimics Reddit’s up/down arrows and score) -->
+                <div class="post-votes">
+                    <div class="upvote">&#9650;</div>
+                    <div class="score">{{ post.score }}</div>
+                    <div class="downvote">&#9660;</div>
+                </div>
+
+                <!-- Post Body Container -->
+                <div class="post-body-container">
+                    <!-- Title and Link -->
+                    <div class="post-title">
+                        {% if post.permalink %}
+                            <a href="{{ post.permalink }}" target="_blank">{{ post.title }}</a>
+                        {% else %}
+                            {{ post.title }}
+                        {% endif %}
+                    </div>
+
+                    <!-- Meta Info -->
+                    <div class="post-meta">
+                        submitted by
+                        {% if post.author %}
+                            <span class="author">{{ post.author }}</span>
+                        {% else %}
+                            [unknown user]
+                        {% endif %}
+                        {% if post.created_utc %}
+                            on <span class="date">{{ post.created_utc }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Thumbnail if present -->
+                    {% if post.thumbnail_url %}
+                        <div class="post-thumbnail">
+                            <img src="{{ post.thumbnail_url }}" alt="Thumbnail" />
+                        </div>
+                    {% endif %}
+
+                    <!-- Image if present -->
+                    {% if post.image_url %}
+                        <div class="post-image">
+                            <img src="{{ post.image_url }}" alt="Full Image" />
+                        </div>
+                    {% endif %}
+
+                    <!-- Main Post Text -->
+                    <div class="post-text">
+                        {{ post.body }}
+                    </div>
+
+                    <!-- Comment Count (Optional, even if we don't display comments) -->
+                    <div class="post-meta">
+                        {{ post.num_comments }} comments
+                    </div>
+                </div> <!-- end post-body-container -->
+            </div> <!-- end post -->
+        </div> <!-- end content -->
+    </div> <!-- end container -->
+</body>
+</html>
